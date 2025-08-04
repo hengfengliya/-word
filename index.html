@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>行业资料分享</title>
+<!-- TailwindCSS -->
+<script src="https://cdn.tailwindcss.com"></script>
+<!-- Font Awesome Icons -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@700&family=Roboto&display=swap" rel="stylesheet">
+<!-- ECharts -->
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<!-- anime.js -->
+<script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+<style>
+  body {font-family: 'Roboto', sans-serif; background: radial-gradient(circle at 50% 0%, rgba(255,215,0,0.15), #111); color: #eee;}
+  h1,h2,h3 {font-family: 'Noto Serif SC', serif; color:#D4AF37;}
+  .section {min-height:100vh; position:relative; display:flex; justify-center items-center; flex-direction:column;}
+  .parallax-bg {position:fixed; top:0; left:0; width:100%; height:100%; background-size:cover; z-index:-1; transform:scale(1); transition:transform .5s;}
+  .fade {opacity:0; transform:translateY(50px); transition:all .6s ease-out;}
+  .fade.show {opacity:1; transform:translateY(0);}  
+</style>
+</head>
+<body class="bg-black text-gray-200">
+<div id="bg" class="parallax-bg" style="background-image: linear-gradient(135deg, rgba(212,175,55,0.2) 0%, rgba(0,0,0,0.4) 100%);"></div>
+<section class="section flex flex-col items-center justify-center text-center">
+  <h1 class="text-6xl md:text-8xl font-bold mb-4 fade">行业资料分享</h1>
+  <p class="text-xl md:text-2xl fade">Industry Insights</p>
+  <i class="fas fa-chart-line text-yellow-500 text-4xl mb-4 fade"></i>
+</section>
+<section class="section flex flex-col items-center justify-center bg-black text-center">
+  <div class="count text-9xl font-bold text-yellow-600 fade">75%</div>
+  <p class="mt-2 text-lg fade">增长率 Growth Rate</p>
+  <div id="chart" class="w-3/4 h-64 mt-8 fade"></div>
+</section>
+<section class="section flex flex-col items-center justify-center text-center">
+  <h2 class="text-5xl md:text-7xl font-bold mb-4 fade">未来趋势</h2>
+  <p class="text-lg md:text-xl fade">Exploring the future with cutting-edge data.</p>
+</section>
+<script>
+// IntersectionObserver for fade in
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if(entry.isIntersecting){
+      entry.target.classList.add('show');
+    }
+  });
+},{threshold:0.3});
+
+document.querySelectorAll('.fade').forEach(el => observer.observe(el));
+
+// Parallax effect
+window.addEventListener('scroll', () => {
+  const scrollPos = window.scrollY;
+  document.getElementById('bg').style.transform = 'scale('+(1 + scrollPos/1000)+')';
+});
+
+// ECharts line example
+var chart = echarts.init(document.getElementById('chart'));
+var option = {
+  textStyle:{color:'#eee'},
+  xAxis: {type: 'category', data: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'], axisLine:{lineStyle:{color:'#888'}}},
+  yAxis: {type:'value', axisLine:{lineStyle:{color:'#888'}}, splitLine:{lineStyle:{color:'rgba(255,255,255,0.1)'}}},
+  series:[{data:[120, 200, 150, 80, 70, 110, 130], type:'line', smooth:true, lineStyle:{color:'#D4AF37'}, areaStyle:{color:'rgba(212,175,55,0.2)'}}]
+};
+chart.setOption(option);
+// anime.js number animation
+const countEl = document.querySelector(".count");
+const countObserver = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){anime({targets:countEl,innerHTML:[0,75],round:1,duration:2000,easing:"easeInOutQuad"});countObserver.disconnect();}});
+},{threshold:0.5});
+countObserver.observe(countEl);
+</script>
+</body>
+</html>
